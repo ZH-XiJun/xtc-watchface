@@ -23,7 +23,8 @@ public class WallpaperServiceProxy extends WallpaperService {
 
     public class ActiveEngine extends WallpaperService.Engine {
         public ActiveEngine() {
-            super(WallpaperServiceProxy.this);
+            super();
+            //super(WallpaperServiceProxy.this);
         }
     }
 }
