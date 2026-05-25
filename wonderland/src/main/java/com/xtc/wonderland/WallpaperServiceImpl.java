@@ -2,16 +2,13 @@ package com.xtc.wonderland;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 
-import com.xtc.common.WallpaperServiceProxy;
+import com.xtc.common.WallpaperServiceProxy.ActiveEngine;
 import com.xtc.common.WeakHandler;
 import com.xtc.common.WatchDataBase;
 
@@ -51,8 +48,8 @@ public class WallpaperServiceImpl extends XTCBaseWallpaperService2 {
     }
 
     @Override
-    public android.service.wallpaper.WallpaperService.Engine onCreateEngine() {
-        return new WonderlandEngine(this);
+    public ActiveEngine onCreateEngine() {
+        return new WonderlandEngine();
     }
 
     public class WonderlandEngine extends XTCBaseWallpaperService2.BaseEngine {
