@@ -1,19 +1,36 @@
 # 小天才表盘逆向工程
 
+_这么吊的表盘引擎不让我做点想康的 这不纯捣乱吗_
+
+逆向xtc的表盘，实现表盘自定义，充分榨干表盘引擎
+
+本项目使用了[AI神力](https://deepseek.com)
+
 ## 项目简介
 
-小天才手表的表盘文件存放在 `/vendor/res/theme/` 目录下，以 `.cl` 为扩展名。这些 `.cl` 文件实质上是 Android APK——厂商仅修改了后缀名，内部结构（AndroidManifest.xml、classes.dex、resources.arsc、res/）与标准 APK 完全一致。
+### 前情提要
 
-本项目的逆向流程：
+作者最近用其他牌子的手表，他们提供了表盘制作工具，可以做出跟主题商店一样的效果，给我做爽了。结果最近翻出来小天才，居然没人研究表盘，这不纯捣乱吗
 
-1. 从手表中提取目标表盘的 `.cl` 文件，将后缀改为 `.apk`
-2. 解压 APK，从中提取出 `wonderland.aar`（AAR 是 Android Library 的打包格式，包含编译后的 class 和资源）
-3. 使用 jadx 等反编译工具将 AAR 中的 `classes.jar` 反编译为 Java 源码
-4. 将反编译后的 Java 文件、资源文件（PNG/XML 等）整理到标准 Android 项目中，修复依赖和编译问题
-5. 保留一个最小化的 AAR（仅含 `com.xtc.common` 等闭源 SDK 类，不含已提取的 `com.xtc.wonderland` 类和冗余的 R 类），作为编译时依赖
+### 正片开始
 
-最终项目结构：Java 源码可自由修改，闭源 SDK 类仍以 AAR 形式引入，可直接在 Android Studio 中编译运行。
+所以我稍微翻了一下，发现小天才手表的表盘文件存放在 `/vendor/res/theme/` 目录下，以 `.cl` 为扩展名。这些 `.cl` 文件实质上就是apk，而且没有代码混淆
+
+稍微沉淀一下之后，这个项目是这么来的：
+
+1. 从手表中提取目标表盘的 `.cl` 文件（目前只有`wanderland.cl`，也就是银河璃虹）
+2. jadx神力逆向，发现`com.xtc.wonderland.WallpaperServiceImpl`就是表盘逻辑，其他都是支持库，改表盘的话动不到
+3. 本来想全部转成.java的，结果逆向出来的东西一堆报红，懒得修了，突然灵光乍现：反正只要改`WallpaperServiceImpl`，那其它的保持字节码形式不就行了？
+4. 分离出`wonderland.aar`作为依赖库导入项目，`WallpaperServiceImpl`以及其他的一点东西以java形式存在于项目中，还有资源也提取出来了
+
+### 项目状态
+
+代码未进行改动，目前可正常编译通过，替换至手表上也能正常工作。
+
+dex会提示有重复类，这个不理他，我剔除掉重复类之后直接爆我一堆红
 
 ## 使用方法
 
-TODO
+**TODO**
+
+改改`WallpaperServiceImpl`试试？
