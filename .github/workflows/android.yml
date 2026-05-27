@@ -22,11 +22,18 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Build with Gradle
-      run: ./gradlew :wonderland:assembleDebug
 
-    - name: Upload artifact
+    - name: Build all modules with Gradle
+      run: ./gradlew assembleDebug
+
+    - name: Upload wonderland artifact
       uses: actions/upload-artifact@v4
       with:
         name: wonderland-debug
         path: wonderland/build/outputs/apk/debug/wonderland-debug.apk
+
+    - name: Upload konata artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: konata-debug
+        path: konata/build/outputs/apk/debug/konata-debug.apk
